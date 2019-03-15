@@ -24,6 +24,11 @@ function NextRoundValuePre:__init(nn, aux_nn, board)
   self:_init_bucketing(board)
 end
 
+function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
+
 --- Initializes the tensor that translates hand ranges to bucket ranges.
 -- @local
 function NextRoundValuePre:_init_bucketing(board)
@@ -36,13 +41,21 @@ function NextRoundValuePre:_init_bucketing(board)
   self.board_count = boards:size(1)
   self.board_buckets = arguments.Tensor(self.board_count, game_settings.hand_count)
 
-  for idx = 1, self.board_count do
-    if idx % 100 == 0 then
-      print(string.format('Bucket / Total: %d / %d', idx, self.board_count))
+  if file_exists('./Nn/Bucketing/board_buckets.dat') and arguments.cache_boards then
+    print('Loading Board Buckets')
+    self.board_buckets = torch.load('./Nn/Bucketing/board_buckets.dat')
+  else
+    for idx = 1, self.board_count do
+      if idx % 100 == 0 then
+        print(string.format('Bucket / Total: %d / %d', idx, self.board_count))
+      end
+      local board = self.boards[idx]
+      self.board_buckets[{idx,{}}]:copy(bucketer:compute_buckets(board))
     end
-    local board = self.boards[idx]
-    self.board_buckets[{idx,{}}]:copy(bucketer:compute_buckets(board))
+    print('Cache Board Buckets')
+    torch.save('./Nn/Bucketing/board_buckets.dat', self.board_buckets)
   end
+  
   self.impossible_mask = torch.lt(self.board_buckets,0)
   self.board_indexes = self.board_buckets:clone()
   self.board_indexes:maskedFill(self.impossible_mask, 1)

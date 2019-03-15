@@ -7,6 +7,8 @@ torch.setdefaulttensortype('torch.FloatTensor')
 
 local params = {}
 
+--- cache board buckets for faster loading
+params.cache_boards = true
 --- whether to run on GPU
 params.gpu = true
 --- list of pot-scaled bet sizes to use in tree

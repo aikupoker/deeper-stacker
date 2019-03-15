@@ -203,9 +203,9 @@ There is a script in Python that you can use to play versus Slum Bot.
 1. Install Python 2.7
 2. Install pip
 3. Install Selenium using pip `pip install -U selenium`
-1. `cd Source && python Player/slumbot_player.py localhost 16177`
-2. Wait for enough data to be generated.
-3. `th Training/raw_converter.lua 4`
+3. Start the deepstack server using command `th Player/deepstack_server.lua 16177`
+4. `cd Source && python Player/slumbot_player.py localhost 16177`
+5. Wait for enough data to be generated.
 
 ## Testing deeper-stacker source code
 

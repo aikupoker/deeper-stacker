@@ -37,8 +37,6 @@ function M:_save_model(model, epoch, valid_loss, learning_rate)
   local information_file_name = path .. '/epoch_' .. epoch .. net_type_str .. '.info'
   torch.save(model_file_name, model)
   torch.save(information_file_name, model_information)
-  
-  torch.save(information_file_name .. '.txt', model_information, 'ascii')
 end
 
 --- Function passed to torch's [optim package](https://github.com/torch/optim).
@@ -145,7 +143,8 @@ function M:train(network, data_stream, epoch_count)
     end
 
     print(string.format('Validation loss: %f  min: %f  max: %f', valid_loss, valid_loss_min, valid_loss_max))
-    print(string.format('Validation progress: %f     Last minimum found: %d epoch back', progress, epoch - M.epoch_num_min_validation_loss))
+    print(string.format('Validation progress    : %f    Last minimum found: %d epoch ago', progress, epoch - M.epoch_num_min_validation_loss))
+    print(string.format('Current best validation: %f    Found at epoch: %d', M.min_validation_loss, M.epoch_num_min_validation_loss))
     next_time = os.date('*t', os.time() + math.floor(timer:time().real))
     print(string.format('Epoch took (s): %f  Timestamp: %s +2h   next time: %02d:%02d', timer:time().real, os.date("%H:%M"), next_time.hour, next_time.min))
 

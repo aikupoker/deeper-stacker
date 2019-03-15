@@ -134,7 +134,7 @@ function M:generate_data_file(data_count, file_name, street)
     local values = arguments.Tensor(batch_size, constants.players_count, game_settings.hand_count)
 
     local pot_size = random_pot_size
-    print(board_string .. ' ' .. batch .. ' ' .. pot_size)
+    io.write(board_string .. ' ' .. batch .. ' ' .. pot_size)
 
     local resolving = Resolving(te)
     local current_node = {}
@@ -164,7 +164,7 @@ function M:generate_data_file(data_count, file_name, street)
     torch.save(arguments.data_path .. train_folder .. basename .. '.inputs', inputs:float())
     torch.save(arguments.data_path .. train_folder .. basename .. '.targets', targets:float())
     
-    io.write('avgTime: ' .. (startTime:time().real / batch) .. '    ')
+    print('    avgTime: ' .. (startTime:time().real / batch))
     
   end
 end
