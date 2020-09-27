@@ -47,7 +47,7 @@ params.net = '{nn.Linear(input_size, 500), nn.BatchNormalization(500), nn.PReLU(
 --- how often to save the model during training
 params.save_epoch = 1
 --- how many epochs to train for
-params.epoch_count = 500
+params.epoch_count = 350
 --- how many solved poker situations are generated for use as training examples
 params.train_data_count = 1500000
 --- learning rate for neural net training

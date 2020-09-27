@@ -18,7 +18,7 @@ local M = {}
 -- @param epoch the current epoch number
 -- @param valid_loss the validation loss of the current network
 -- @local
-function M:_save_model(model, epoch, valid_loss, learning_rate)
+function M:_save_model(model, epoch, valid_loss, learning_rate, street)
 
   local model_information = {}
   model_information.epoch = epoch
@@ -32,6 +32,17 @@ function M:_save_model(model, epoch, valid_loss, learning_rate)
   else
     path = path .. "Limit/"
   end
+
+  if street == 4 then
+    path = path .. "river/"
+  elseif street == 3 then
+    path = path .. "turn/"
+  elseif street == 2 then
+    path = path .. "flop/"
+  elseif street == 1 then
+    path = path .. "preflop-aux/"
+  end
+
   local net_type_str = arguments.gpu and '_gpu' or '_cpu'
   local model_file_name = path .. '/epoch_' .. epoch .. net_type_str .. '.model'
   local information_file_name = path .. '/epoch_' .. epoch .. net_type_str .. '.info'
@@ -72,7 +83,8 @@ end
 -- @param data_stream a @{data_stream|DataStream} object which provides the
 -- training data
 -- @param epoch_count the number of epochs (passes of the training data) to train for
-function M:train(network, data_stream, epoch_count)
+-- @param street the street that we are training the network
+function M:train(network, data_stream, epoch_count, street)
 
   M.network = network
   M.data_stream = data_stream
@@ -151,7 +163,7 @@ function M:train(network, data_stream, epoch_count)
     --saving the model
     print(string.format('Epoch / Total: %d / %d', epoch, epoch_count))
     if (epoch % arguments.save_epoch == 0) then
-      self:_save_model(network, epoch, valid_loss, state.learningRate)
+      self:_save_model(network, epoch, valid_loss, state.learningRate, street)
     end
   end
   --end of train loop

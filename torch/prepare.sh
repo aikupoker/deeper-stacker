@@ -11,7 +11,7 @@ apt-get install -y sudo git gcc g++ make vim
 
 # get this repo
 mkdir work && cd work
-git clone https://github.com/godmoves/deeper-stack.git
+git clone https://github.com/aikupoker/deeper-stack.git ./deeper-stack
 
 # unzip the hand rank file
 cd deeper-stack/Source/Game/Evaluation
@@ -33,7 +33,7 @@ rm -fr cmake/3.6/Modules/FindCUDA*
 cp ../deeper-stack/torch/extra/cutorch/* ./extra/cutorch
 cp ../deeper-stack/torch/pkg/torch/* ./pkg/torch
 cd extra/cutorch
-patch -p1 < atomic.patch
+patch -p1 < automic.patch
 cd ../..
 
 # start build torch
@@ -44,4 +44,3 @@ source $HOME/.bashrc
 # install some packages we need
 luarocks install luasocket
 luarocks install graphviz
-

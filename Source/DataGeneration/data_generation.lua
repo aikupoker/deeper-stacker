@@ -50,12 +50,10 @@ function M:generate_data_file(data_count, file_name, street)
   local te = TerminalEquity()
   local startTime = torch.Timer()
   
-  local train_folder = "xxx/"
+  local train_folder = "Limit/"
   
   if game_settings.nl then
     train_folder = "NoLimit/"
-  else
-    train_folder = "Limit/"
   end
 
   if street == 4 then

@@ -56,6 +56,7 @@ function M:generate_data_file(data_count, file_name, street)
   local mask = arguments.Tensor(batch_size, game_settings.hand_count):zero()
 
   local board = arguments.Tensor()
+  local startTime = torch.Timer()
   local te = TerminalEquity()
   te:set_board(board)
   range_generator:set_board(te, board)
@@ -110,8 +111,10 @@ function M:generate_data_file(data_count, file_name, street)
     for i = 1,#min_pot do
       pot_range[i] = max_pot[i] - min_pot[i]
     end
+
     local random_pot_cats = torch.rand(arguments.gen_batch_size):mul(#min_pot):add(1):floor()
-    local random_pot_sizes = torch.rand(arguments.gen_batch_size,1)
+    local random_pot_sizes = torch.rand(arguments.gen_batch_size, 1)
+
     for i = 1, arguments.gen_batch_size do
       random_pot_sizes[i][1] = random_pot_sizes[i][1] * pot_range[random_pot_cats[i]]
       random_pot_sizes[i][1] = random_pot_sizes[i][1] + min_pot[random_pot_cats[i]]
@@ -119,10 +122,10 @@ function M:generate_data_file(data_count, file_name, street)
 
     --pot features are pot sizes normalized between (ante/stack,1)
     local pot_size_features = game_settings.nl and random_pot_sizes:clone():mul(1/arguments.stack) or
-        random_pot_sizes:clone():mul(1/max_pot[3])
+        random_pot_sizes:clone():mul(1 / max_pot[3])
 
     --translating ranges to features
-    local pot_feature_index =  -1
+    local pot_feature_index = -1
     inputs[{{}, pot_feature_index}]:copy(pot_size_features)
     input_batch[{{}, pot_feature_index}]:copy(pot_size_features)
 
@@ -165,14 +168,22 @@ function M:generate_data_file(data_count, file_name, street)
     end
 
     local basename = file_name .. '-' .. batch
-    local train_folder = "xxx/"
+
+    local train_folder = "Limit/"
+
     if game_settings.nl then
       train_folder = "NoLimit/"
-    else
-      train_folder = "Limit/"
     end
+
+    if street == 1 then
+      train_folder = train_folder .. "preflop-aux_raw/"
+    end
+
     torch.save(arguments.data_path .. train_folder .. basename .. '.inputs', input_batch:float())
     torch.save(arguments.data_path .. train_folder .. basename .. '.targets', target_batch:float())
+
+    print('    avgTime: ' .. (startTime:time().real / batch))
+
   end
 end
 

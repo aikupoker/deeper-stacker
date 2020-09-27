@@ -28,4 +28,4 @@ if arguments.gpu then
 end
 
 local data_stream = DataStream(street)
-train:train(network, data_stream, arguments.epoch_count)
+train:train(network, data_stream, arguments.epoch_count, street)

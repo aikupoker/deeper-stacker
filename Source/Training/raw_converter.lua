@@ -44,6 +44,9 @@ function convert(street)
   elseif street == 2 then
     srcfolder = "flop_raw/"
     destfolder = "flop/"
+  elseif street == 1 then
+    srcfolder = "preflop-aux_raw/"
+    destfolder = "preflop-aux/"
   end
 
   --loading valid data
