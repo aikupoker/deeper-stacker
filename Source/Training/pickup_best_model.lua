@@ -55,7 +55,7 @@ function select_best_model(street)
 
     if (epoch % save_epoch == 0) then
 
-      local information_file_name = path .. '/epoch_' .. epoch .. net_type_str .. '.info'
+      local information_file_name = path .. 'epoch_' .. epoch .. net_type_str .. '.info'
 
       if file_exists(information_file_name) then
         table = torch.load(information_file_name)
@@ -72,18 +72,25 @@ function select_best_model(street)
 
     print('best epoch: ' .. best_epoch)
     print('best loss: ' .. best_loss)
-    print('best model path ' .. best_model_info_path)
+    print('best model info path ' .. best_model_info_path)
 
     print('saving final model')
 
-    local best_model_path = path .. '/epoch_' .. best_epoch .. net_type_str .. '.model'
-    local best_model = torch.load(best_model_path)
-    local final_model_file_name = path .. '/final_' .. net_type_str .. '.model'
+    local best_model_path = path .. 'epoch_' .. best_epoch .. net_type_str .. '.model'
 
-    torch.save(final_model_file_name, best_model)
+    if file_exists(best_model_path) then
+      local best_model = torch.load(best_model_path)
+      local final_model_file_name = path .. 'final_' .. net_type_str .. '.model'
+
+      torch.save(final_model_file_name, best_model)
+
+    else
+      print('error finding best model to pickup -- not found ' .. best_model_path)
+    end
+
 
     local best_model_information = torch.load(best_model_info_path)
-    local final_information_file_name = path .. '/final_' .. net_type_str .. '.info'
+    local final_information_file_name = path .. 'final_' .. net_type_str .. '.info'
 
     torch.save(final_information_file_name, best_model_information)
 
