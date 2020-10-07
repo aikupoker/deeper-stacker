@@ -1,6 +1,12 @@
 --- Pick up the model with lowest validation loss
+
 require 'torch'
+
+require 'nn'
+require 'cunn'
+
 local arguments = require 'Settings.arguments'
+local game_settings = require 'Settings.game_settings'
 
 if #arg == 0 then
   print("Please specify the street. 1 = preflop, 4 = river")
@@ -70,7 +76,7 @@ function select_best_model(street)
 
     print('saving final model')
 
-    local best_model_path = path .. '/epoch_' .. epoch .. net_type_str .. '.model'
+    local best_model_path = path .. '/epoch_' .. best_epoch .. net_type_str .. '.model'
     local best_model = torch.load(best_model_path)
     local final_model_file_name = path .. '/final_' .. net_type_str .. '.model'
 
