@@ -44,8 +44,8 @@ function M:_save_model(model, epoch, valid_loss, learning_rate, street)
   end
 
   local net_type_str = arguments.gpu and '_gpu' or '_cpu'
-  local model_file_name = path .. '/epoch_' .. epoch .. net_type_str .. '.model'
-  local information_file_name = path .. '/epoch_' .. epoch .. net_type_str .. '.info'
+  local model_file_name = path .. 'epoch_' .. epoch .. net_type_str .. '.model'
+  local information_file_name = path .. 'epoch_' .. epoch .. net_type_str .. '.info'
   torch.save(model_file_name, model)
   torch.save(information_file_name, model_information)
 end

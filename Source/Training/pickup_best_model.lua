@@ -70,7 +70,7 @@ function select_best_model(street)
 
   if file_exists(best_model_info_path) then
 
-    print('best epoch: ' .. best_epoch)
+    print('best epoch: ' .. best_epoch .. ' of total: ' .. epoch_count .. ' epochs')
     print('best loss: ' .. best_loss)
     print('best model info path ' .. best_model_info_path)
 
@@ -80,7 +80,7 @@ function select_best_model(street)
 
     if file_exists(best_model_path) then
       local best_model = torch.load(best_model_path)
-      local final_model_file_name = path .. 'final_' .. net_type_str .. '.model'
+      local final_model_file_name = path .. 'final' .. net_type_str .. '.model'
 
       torch.save(final_model_file_name, best_model)
 
@@ -90,7 +90,7 @@ function select_best_model(street)
 
 
     local best_model_information = torch.load(best_model_info_path)
-    local final_information_file_name = path .. 'final_' .. net_type_str .. '.info'
+    local final_information_file_name = path .. 'final' .. net_type_str .. '.info'
 
     torch.save(final_information_file_name, best_model_information)
 
